@@ -1,4 +1,4 @@
-package com.sideproject.mercy
+package com.sideproject.mercy.presentation.view.two
 
 import android.os.Bundle
 import android.view.LayoutInflater

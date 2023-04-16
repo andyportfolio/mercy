@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/oneFragment"
-        android:name="com.sideproject.mercy.OneFragment"
+        android:name="com.sideproject.mercy.presentation.view.onboarding.OnBoardingFragment"
         android:label="fragment_one"
-        tools:layout="@layout/fragment_one" />
+        tools:layout="@layout/fragment_onboarding" />
     <fragment
         android:id="@+id/twoFragment"
-        android:name="com.sideproject.mercy.TwoFragment"
+        android:name="com.sideproject.mercy.presentation.view.two.TwoFragment"
         android:label="fragment_two"
         tools:layout="@layout/fragment_two" />
     <fragment
