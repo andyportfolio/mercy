@@ -83,10 +83,4 @@ dependencies {
 
     //Coil for image rendering
     implementation "io.coil-kt:coil:2.3.0"
-
-    //Glide + Glide Transformations
-//    def glide_version = "4.12.0"
-//    implementation "com.github.bumptech.glide:glide:$glide_version"
-//    kapt "com.github.bumptech.glide:compiler:$glide_version"
-//    implementation 'jp.wasabeef:glide-transformations:4.3.0'
 }
