@@ -52,15 +52,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    //Paging
-    implementation "androidx.paging:paging-runtime-ktx:3.2.0-alpha01"
-
-    //Navigation
-//    def nav_version = "2.5.0"
-//    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-//    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
 
@@ -86,12 +77,6 @@ dependencies {
 
     //DataStore
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
-
-    //Retrofit + Gson
-//    def retrofit_version = "2.9.0"
-//    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-//    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-//    implementation 'com.google.code.gson:gson:2.9.0'
 
     //ktor
     def ktor_version = "2.3.0"
