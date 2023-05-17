@@ -1,10 +1,15 @@
+/*********************************************
+ * Copyright mercy project 2023
+ * All rights reserved
+ *********************************************/
 package com.sideproject.mercy.presentation.view.onboarding
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sideproject.mercy.common.Resource
-import com.sideproject.mercy.domain.entity.OnBoarding
-import com.sideproject.mercy.domain.usecase.GetOnBoardingCase
+import com.sideproject.mercy.domain.entity.SampleData
+import com.sideproject.mercy.domain.usecase.GetSampleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -15,19 +20,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
-    private val getOnBoardingCase: GetOnBoardingCase
+    private val getSampleUseCase: GetSampleUseCase
 ) : ViewModel() {
 
-    private val _onBoarding = MutableStateFlow<Resource<OnBoarding>>(Resource.Loading())
-    val onBoarding: StateFlow<Resource<OnBoarding>> = _onBoarding.stateIn(
+    private val _sampleData = MutableStateFlow<Resource<SampleData>>(Resource.Loading())
+    val sampleData: StateFlow<Resource<SampleData>> = _sampleData.stateIn(
         scope = viewModelScope,
         started = WhileSubscribed(5000),
         initialValue = Resource.Loading()
     )
 
-    fun getOnBoarding() = viewModelScope.launch {
-        getOnBoardingCase.invoke().collect { values ->
-            _onBoarding.value = values
+    private fun getOnBoarding() = viewModelScope.launch {
+        getSampleUseCase.invoke().collect { values ->
+            Log.d("OnBoardingViewModel","getSampleUseCase: $values")
+            _sampleData.value = values
         }
     }
 

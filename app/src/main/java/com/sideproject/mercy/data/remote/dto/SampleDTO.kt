@@ -1,7 +1,6 @@
 package com.sideproject.mercy.data.remote.dto
 
-import com.google.gson.annotations.SerializedName
-import com.sideproject.mercy.domain.entity.OnBoarding
+import kotlinx.serialization.Serializable
 
 //https://dog.ceo/api/breeds/image/random
 
@@ -10,11 +9,8 @@ import com.sideproject.mercy.domain.entity.OnBoarding
 //    "status": "success"
 //}
 
-data class DogDTO(
-    @SerializedName("id")
-    val id: Int = 1,
-    @SerializedName("message")
+@Serializable
+data class SampleDTO(
     val message: String,
-    @SerializedName("status")
     val status: String
 )

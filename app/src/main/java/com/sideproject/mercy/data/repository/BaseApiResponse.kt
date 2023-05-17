@@ -1,28 +1,37 @@
+/*********************************************
+ * Copyright mercy project 2023
+ * All rights reserved
+ *********************************************/
 package com.sideproject.mercy.data.repository
 
 import com.sideproject.mercy.common.Resource
-import retrofit2.Response
-
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 abstract class BaseApiResponse {
-    suspend fun <T,U> safeApiCall(
-        apiCall: suspend () -> Response<T>,
+    suspend inline fun <reified T,U> safeApiCall(
+        httpClient : HttpClient,
+        endPoint : String,
         mapper: (T) -> U
     ): Resource<U> {
         try {
-            val response = apiCall()
-            if (response.isSuccessful) {
-                val body = response.body()
+            val response: HttpResponse = httpClient.get(endPoint)
+            if (response.status == HttpStatusCode.OK) {
+                val body = response.body<T>()
                 body?.let {
                     return Resource.Success(mapper(body))
                 }
             }
-            return error("${response.code()} ${response.message()}")
+            return error("${response.status} ${response.bodyAsText()}")
         } catch (e: Exception) {
             return error(e.message ?: e.toString())
         }
     }
 
-    private fun <T> error(errorMessage: String): Resource<T> {
+    fun <T> error(errorMessage: String): Resource<T> {
         return Resource.Error("Api call failed $errorMessage")
     }
 }

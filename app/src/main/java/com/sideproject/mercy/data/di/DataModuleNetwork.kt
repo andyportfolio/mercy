@@ -1,74 +1,59 @@
+/*********************************************
+ * Copyright mercy project 2023
+ * All rights reserved
+ *********************************************/
 package com.sideproject.mercy.data.di
 
 import android.app.Application
 import androidx.room.Room
-import com.sideproject.mercy.data.Config.BASE_URL
-import com.sideproject.mercy.data.local.MercyDatabase
-import com.sideproject.mercy.data.remote.api.MercyAPI
-import com.sideproject.mercy.data.repository.OnBoardingGatewayImpl
-import com.sideproject.mercy.domain.gateway.OnBoardingGateway
+import com.sideproject.mercy.data.local.SampleDatabase
+import com.sideproject.mercy.data.repository.SampleGatewayImpl
+import com.sideproject.mercy.domain.gateway.SampleGateway
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DataModuleNetwork {
-    private const val TIME_OUT = 15L
 
-    @Singleton
-    @Provides
-    fun provideHttpClient(): OkHttpClient {
-        return OkHttpClient
-            .Builder()
-            .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .build()
+    @OptIn(ExperimentalSerializationApi::class)
+    private val json: Json = Json {
+        prettyPrint = true
+        isLenient = true
+        ignoreUnknownKeys = true
+        explicitNulls = true
     }
-
     @Singleton
     @Provides
-    fun provideConverterFactory(): GsonConverterFactory =
-        GsonConverterFactory.create()
-
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-        gsonConverterFactory: GsonConverterFactory
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
+    fun provideHttpClient(): HttpClient {
+        return HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(json)
+            }
+        }
     }
-
-    @Singleton
-    @Provides
-    fun provideCurrencyService(retrofit: Retrofit): MercyAPI =
-        retrofit.create(MercyAPI::class.java)
-
     @Provides
     @Singleton
-    fun provideNoteDatabase(app: Application): MercyDatabase {
+    fun provideSampleDatabase(app: Application): SampleDatabase {
         return Room.databaseBuilder(
             app,
-            MercyDatabase::class.java,
+            SampleDatabase::class.java,
             "mercy_db"
         ).build()
     }
-
+    //NOTE : add GatewayImpl
     @Provides
     @Singleton
-    fun provideNoteRepository(db: MercyDatabase, api: MercyAPI): OnBoardingGateway {
-        return OnBoardingGatewayImpl(api, db.mercyDao)
+    fun provideSampleRepository(db: SampleDatabase, httpClient: HttpClient): SampleGateway {
+        return SampleGatewayImpl(httpClient, db.sampleDao)
     }
 }
