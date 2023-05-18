@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace 'com.sideproject.mercy'
+    namespace 'com.vclip.mercy'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.sideproject.mercy"
+        applicationId "com.vclip.mercy"
         minSdk 26
         targetSdk 33
         versionCode 1
